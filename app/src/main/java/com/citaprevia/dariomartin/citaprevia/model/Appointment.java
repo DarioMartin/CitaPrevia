@@ -10,6 +10,12 @@ public class Appointment {
 
     private Date date;
     private String notes;
+    private String id;
+
+    public Appointment(String id, Date date) {
+        this.date = date;
+        this.id = id;
+    }
 
     public Date getDate() {
         return date;
