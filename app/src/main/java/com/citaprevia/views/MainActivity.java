@@ -1,5 +1,6 @@
 package com.citaprevia.views;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,10 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import com.citaprevia.dariomartin.citaprevia.model.Appointment;
+
 import com.citaprevia.dariomartin.R;
-import com.citaprevia.dariomartin.citaprevia.views.AppointmentsFragment;
-import com.citaprevia.dariomartin.citaprevia.views.UserFragment;
+import com.citaprevia.model.Appointment;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements AppointmentsFragment.OnListFragmentInteractionListener {
 
@@ -55,5 +56,12 @@ public class MainActivity extends AppCompatActivity implements AppointmentsFragm
     @Override
     public void onListFragmentInteraction(Appointment appointment) {
 
+    }
+
+    public void logOut() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

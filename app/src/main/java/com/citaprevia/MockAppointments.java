@@ -1,6 +1,6 @@
-package com.citaprevia.dariomartin.citaprevia.mock;
+package com.citaprevia;
 
-import com.citaprevia.dariomartin.citaprevia.model.Appointment;
+import com.citaprevia.model.Appointment;
 
 import java.util.ArrayList;
 import java.util.Date;

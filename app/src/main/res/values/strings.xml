@@ -18,4 +18,5 @@
         completions."
     </string>
     <string name="auth_failed">No ha podido realizarse el registro</string>
+    <string name="logout">Cerrar sesión</string>
 </resources>

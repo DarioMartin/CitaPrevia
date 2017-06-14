@@ -1,4 +1,4 @@
-package com.citaprevia.dariomartin.citaprevia.views;
+package com.citaprevia.views;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,18 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.citaprevia.dariomartin.citaprevia.R;
-import com.citaprevia.dariomartin.citaprevia.model.Appointment;
-import com.citaprevia.dariomartin.citaprevia.views.AppointmentsFragment.OnListFragmentInteractionListener;
+import com.citaprevia.dariomartin.R;
+import com.citaprevia.model.Appointment;
 
 import java.util.List;
+
 
 public class AppointmentListAdapter extends RecyclerView.Adapter<AppointmentListAdapter.AppointmentViewHolder> {
 
     private final List<Appointment> appointments;
-    private final OnListFragmentInteractionListener mListener;
+    private final AppointmentsFragment.OnListFragmentInteractionListener mListener;
 
-    public AppointmentListAdapter(List<Appointment> appointments, OnListFragmentInteractionListener listener) {
+    public AppointmentListAdapter(List<Appointment> appointments, AppointmentsFragment.OnListFragmentInteractionListener listener) {
         this.appointments = appointments;
         mListener = listener;
     }

@@ -34,5 +34,14 @@
         android:textSize="24sp"
         tools:text="Martín-Lara Ortega" />
 
+    <Button
+        android:id="@+id/logout"
+        style="?android:textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/logout"
+        android:textStyle="bold" />
+
 
 </LinearLayout>

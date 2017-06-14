@@ -1,4 +1,4 @@
-package com.citaprevia.dariomartin.citaprevia.views;
+package com.citaprevia.views;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,9 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.citaprevia.dariomartin.citaprevia.R;
-import com.citaprevia.dariomartin.citaprevia.mock.MockAppointments;
-import com.citaprevia.dariomartin.citaprevia.model.Appointment;
+import com.citaprevia.MockAppointments;
+import com.citaprevia.dariomartin.R;
+import com.citaprevia.model.Appointment;
 
 public class AppointmentsFragment extends Fragment {
 

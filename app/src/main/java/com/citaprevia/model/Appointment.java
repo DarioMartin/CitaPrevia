@@ -1,4 +1,4 @@
-package com.citaprevia.dariomartin.citaprevia.model;
+package com.citaprevia.model;
 
 import java.util.Date;
 
