@@ -1,4 +1,4 @@
-package com.citaprevia.dariomartin.citaprevia.views;
+package com.citaprevia.views;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,9 +8,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-
-import com.citaprevia.dariomartin.citaprevia.R;
 import com.citaprevia.dariomartin.citaprevia.model.Appointment;
+import com.citaprevia.dariomartin.R;
+import com.citaprevia.dariomartin.citaprevia.views.AppointmentsFragment;
+import com.citaprevia.dariomartin.citaprevia.views.UserFragment;
 
 public class MainActivity extends AppCompatActivity implements AppointmentsFragment.OnListFragmentInteractionListener {
 
