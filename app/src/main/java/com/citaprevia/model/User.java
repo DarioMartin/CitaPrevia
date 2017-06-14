@@ -6,7 +6,7 @@ package com.citaprevia.model;
 
 public class User {
 
-    enum Role{
+    public enum Role {
         PATIENT, PROFESSIONAL
     }
 
@@ -15,6 +15,9 @@ public class User {
     private String surname;
     private String age;
     private String id;
+
+    public User() {
+    }
 
     public User(Role role, String name, String surname) {
         this.role = role;
