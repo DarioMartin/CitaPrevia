@@ -12,12 +12,18 @@ import android.view.ViewGroup;
 import com.citaprevia.MockAppointments;
 import com.citaprevia.dariomartin.R;
 import com.citaprevia.model.Appointment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class AppointmentsFragment extends Fragment {
 
     private static final String USER_ID = "USER_ID";
     private OnListFragmentInteractionListener listener;
     private String userId;
+    private AppointmentListAdapter adapter;
 
     public AppointmentsFragment() {
     }
@@ -37,6 +43,24 @@ public class AppointmentsFragment extends Fragment {
         if (getArguments() != null) {
             userId = getArguments().getString(USER_ID);
         }
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("appointments");
+
+        // Attach a listener to read the data at our posts reference
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Appointment appointment = dataSnapshot.getValue(Appointment.class);
+                System.out.println(appointment);
+                adapter.addAppointment(appointment);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
     }
 
     @Override
@@ -46,7 +70,8 @@ public class AppointmentsFragment extends Fragment {
         Context context = view.getContext();
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new AppointmentListAdapter(MockAppointments.getAppointments(5), listener));
+        adapter = new AppointmentListAdapter(listener);
+        recyclerView.setAdapter(adapter);
         return view;
     }
 

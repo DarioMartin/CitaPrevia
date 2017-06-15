@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.citaprevia.dariomartin.R;
 import com.citaprevia.model.Appointment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,8 +18,8 @@ public class AppointmentListAdapter extends RecyclerView.Adapter<AppointmentList
     private final List<Appointment> appointments;
     private final AppointmentsFragment.OnListFragmentInteractionListener mListener;
 
-    public AppointmentListAdapter(List<Appointment> appointments, AppointmentsFragment.OnListFragmentInteractionListener listener) {
-        this.appointments = appointments;
+    public AppointmentListAdapter( AppointmentsFragment.OnListFragmentInteractionListener listener) {
+        this.appointments = new ArrayList<>();
         mListener = listener;
     }
 
@@ -48,6 +49,11 @@ public class AppointmentListAdapter extends RecyclerView.Adapter<AppointmentList
     @Override
     public int getItemCount() {
         return appointments.size();
+    }
+
+    public void addAppointment(Appointment appointment) {
+        appointments.add(appointment);
+        notifyDataSetChanged();
     }
 
     public class AppointmentViewHolder extends RecyclerView.ViewHolder {
