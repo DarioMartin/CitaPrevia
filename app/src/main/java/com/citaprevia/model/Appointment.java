@@ -1,6 +1,7 @@
 package com.citaprevia.model;
 
-import java.util.Date;
+
+import java.util.Calendar;
 
 /**
  * Created by dariomartin on 13/6/17.
@@ -8,21 +9,25 @@ import java.util.Date;
 
 public class Appointment {
 
-    private Date date;
+    private Calendar calendar;
+    private String userId;
     private String notes;
-    private String id;
 
-    public Appointment(String id, Date date) {
-        this.date = date;
-        this.id = id;
+
+    public Appointment() {
     }
 
-    public Date getDate() {
-        return date;
+    public Appointment(Calendar calendar, String userId) {
+        this.calendar = calendar;
+        this.userId = userId;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public Calendar getCalendar() {
+        return calendar;
+    }
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
     }
 
     public String getNotes() {
@@ -31,5 +36,13 @@ public class Appointment {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

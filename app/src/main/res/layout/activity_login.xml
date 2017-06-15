@@ -43,6 +43,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="26dp"
                 android:text="@string/login_intro_message" />
 
             <android.support.design.widget.TextInputLayout

@@ -25,14 +25,14 @@ public class AppointmentListAdapter extends RecyclerView.Adapter<AppointmentList
     @Override
     public AppointmentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item, parent, false);
+                .inflate(R.layout.appointement_list_item, parent, false);
         return new AppointmentViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final AppointmentViewHolder holder, int position) {
         holder.appointment = appointments.get(position);
-        holder.mIdView.setText(appointments.get(position).getDate().toString());
+        holder.mIdView.setText(appointments.get(position).getCalendar().toString());
         holder.mContentView.setText(appointments.get(position).getNotes());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

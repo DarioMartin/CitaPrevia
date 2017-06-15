@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.citaprevia.dariomartin.R;
 import com.citaprevia.model.User;
+import com.citaprevia.persistence.DbHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -111,6 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void goToMainActivity() {
         Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void registerUser() {
@@ -223,14 +225,14 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "createUserWithEmail:failed", task.getException());
-                            Toast.makeText(RegisterActivity.this, R.string.auth_failed, Toast.LENGTH_SHORT).show();
-                            showProgress(false);
-                        } else {
+                        if (task.isSuccessful()) {
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                             createUser(user.getUid());
                             goToMainActivity();
+                        } else {
+                            Log.w(TAG, "createUserWithEmail:failed", task.getException());
+                            Toast.makeText(RegisterActivity.this, R.string.auth_failed, Toast.LENGTH_SHORT).show();
+                            showProgress(false);
                         }
                     }
                 });
@@ -241,8 +243,8 @@ public class RegisterActivity extends AppCompatActivity {
         String surname = surnameView.getText().toString();
         User user = new User(User.Role.PATIENT, name, surname);
 
-        DatabaseReference database = FirebaseDatabase.getInstance().getReference();
-        database.child("users").child(userId).setValue(user);
+        DbHelper dbHelper = DbHelper.getInstance();
+        dbHelper.addUser(userId, user);
     }
 
 }

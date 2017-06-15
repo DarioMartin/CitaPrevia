@@ -8,11 +8,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.citaprevia.dariomartin.R;
 import com.citaprevia.model.Appointment;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements AppointmentsFragment.OnListFragmentInteractionListener {
 
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements AppointmentsFragm
                     setFragment(AppointmentsFragment.newInstance(""));
                     return true;
                 case R.id.navigation_add:
-                    setFragment(AppointmentsFragment.newInstance(""));
+                    setFragment(NewAppointmentFragment.newInstance());
                     return true;
                 case R.id.navigation_profile:
                     setFragment(UserFragment.newInstance(""));
@@ -35,14 +37,43 @@ public class MainActivity extends AppCompatActivity implements AppointmentsFragm
             return false;
         }
     };
+    private FirebaseAuth.AuthStateListener authListener;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        auth = FirebaseAuth.getInstance();
+        authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    finish();
+                }
+            }
+        };
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        
+        navigation.setSelectedItemId(R.id.navigation_appointment);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(authListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (authListener != null) {
+            auth.removeAuthStateListener(authListener);
+        }
     }
 
     protected void setFragment(Fragment fragment) {

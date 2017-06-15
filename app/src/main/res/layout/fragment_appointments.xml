@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
         tools:context="com.citaprevia.dariomartin.citaprevia.views.AppointmentsFragment"
-        tools:listitem="@layout/fragment_item" />
+        tools:listitem="@layout/appointement_list_item" />
 
 
 </FrameLayout>

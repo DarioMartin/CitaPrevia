@@ -3,6 +3,7 @@ package com.citaprevia;
 import com.citaprevia.model.Appointment;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -12,11 +13,11 @@ import java.util.Date;
 public class MockAppointments {
 
 
-    public static ArrayList<Appointment> getAppointments(int n){
+    public static ArrayList<Appointment> getAppointments(int n) {
         ArrayList<Appointment> appointments = new ArrayList<>();
 
-        for(int i=0; i<n; i++){
-            appointments.add(new Appointment(String.valueOf(i+1), new Date()));
+        for (int i = 0; i < n; i++) {
+            appointments.add(new Appointment(Calendar.getInstance(), String.valueOf(i + 1)));
         }
 
         return appointments;
