@@ -1,4 +1,4 @@
-package com.citaprevia.views;
+package com.citaprevia.views.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -14,13 +14,14 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.citaprevia.dariomartin.R;
+import com.citaprevia.model.User;
+import com.citaprevia.persistence.DbHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,13 +31,14 @@ import com.google.firebase.auth.FirebaseUser;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     private final String TAG = "LoginActivity";
 
-    private AutoCompleteTextView emailView;
+    private EditText nameView;
+    private EditText surnameView;
+    private EditText emailView;
     private EditText passwordView;
-    private TextView registerButton;
     private View progressView;
     private View loginFormView;
 
@@ -47,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
 
         auth = FirebaseAuth.getInstance();
 
@@ -64,34 +66,26 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        emailView = (AutoCompleteTextView) findViewById(R.id.email);
-
+        nameView = (EditText) findViewById(R.id.name);
+        surnameView = (EditText) findViewById(R.id.surname);
+        emailView = (EditText) findViewById(R.id.email);
         passwordView = (EditText) findViewById(R.id.password);
         passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    registerUser();
                     return true;
                 }
                 return false;
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        registerButton = (TextView) findViewById(R.id.button_register);
+        Button registerButton = (Button) findViewById(R.id.register_button);
         registerButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+            public void onClick(View view) {
+                registerUser();
             }
         });
 
@@ -114,27 +108,38 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToMainActivity() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    private void attemptLogin() {
+    private void registerUser() {
         // Reset errors.
+        nameView.setError(null);
+        surnameView.setError(null);
         emailView.setError(null);
         passwordView.setError(null);
 
         // Store values at the time of the login attempt.
+        String name = nameView.getText().toString();
+        String surname = surnameView.getText().toString();
         String email = emailView.getText().toString();
         String password = passwordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
+
+        if (name == null || name.isEmpty()) {
+            nameView.setError(getString(R.string.error_invalid_name));
+            focusView = nameView;
+            cancel = true;
+        }
+
+        if (surname == null || surname.isEmpty()) {
+            surnameView.setError(getString(R.string.error_invalid_surname));
+            focusView = nameView;
+            cancel = true;
+        }
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
@@ -162,8 +167,7 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-
-            loginUser(email, password);
+            registerUser(email, password);
         }
     }
 
@@ -213,21 +217,33 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void loginUser(String email, String password) {
-        auth.signInWithEmailAndPassword(email, password)
+    private void registerUser(final String email, final String password) {
+        auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithEmail:failed", task.getException());
-                            Toast.makeText(LoginActivity.this, R.string.auth_failed, Toast.LENGTH_SHORT).show();
-                            showProgress(false);
-                        } else {
+                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            createUser(user.getUid());
                             goToMainActivity();
+                        } else {
+                            Log.w(TAG, "createUserWithEmail:failed", task.getException());
+                            Toast.makeText(RegisterActivity.this, R.string.auth_failed, Toast.LENGTH_SHORT).show();
+                            showProgress(false);
                         }
                     }
                 });
     }
+
+    private void createUser(String userId) {
+        String name = nameView.getText().toString();
+        String surname = surnameView.getText().toString();
+        User user = new User(User.Role.PATIENT, name, surname);
+
+        DbHelper dbHelper = DbHelper.getInstance();
+        dbHelper.addUser(userId, user);
+    }
+
 }
 

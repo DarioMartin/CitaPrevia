@@ -9,7 +9,7 @@ import java.util.Calendar;
 
 public class Appointment {
 
-    private Calendar calendar;
+    private long date;
     private String userId;
     private String notes;
 
@@ -17,17 +17,17 @@ public class Appointment {
     public Appointment() {
     }
 
-    public Appointment(Calendar calendar, String userId) {
-        this.calendar = calendar;
+    public Appointment(long date, String userId) {
+        this.date = date;
         this.userId = userId;
     }
 
-    public Calendar getCalendar() {
-        return calendar;
+    public long getDate() {
+        return date;
     }
 
-    public void setCalendar(Calendar calendar) {
-        this.calendar = calendar;
+    public void setDate(long date) {
+        this.date = date;
     }
 
     public String getNotes() {
@@ -45,4 +45,6 @@ public class Appointment {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+
 }

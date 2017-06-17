@@ -1,4 +1,4 @@
-package com.citaprevia.views;
+package com.citaprevia.views.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,9 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.citaprevia.MockAppointments;
 import com.citaprevia.dariomartin.R;
 import com.citaprevia.model.Appointment;
+import com.citaprevia.views.adapters.AppointmentListAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,9 +51,11 @@ public class AppointmentsFragment extends Fragment {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Appointment appointment = dataSnapshot.getValue(Appointment.class);
-                System.out.println(appointment);
-                adapter.addAppointment(appointment);
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    System.out.println(postSnapshot);
+                    Appointment appointment = postSnapshot.getValue(Appointment.class);
+                    adapter.addAppointment(appointment);
+                }
             }
 
             @Override

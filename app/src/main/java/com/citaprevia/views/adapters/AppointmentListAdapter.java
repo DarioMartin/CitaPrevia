@@ -1,6 +1,8 @@
-package com.citaprevia.views;
+package com.citaprevia.views.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 
 import com.citaprevia.dariomartin.R;
 import com.citaprevia.model.Appointment;
+import com.citaprevia.views.fragments.AppointmentsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +21,7 @@ public class AppointmentListAdapter extends RecyclerView.Adapter<AppointmentList
     private final List<Appointment> appointments;
     private final AppointmentsFragment.OnListFragmentInteractionListener mListener;
 
-    public AppointmentListAdapter( AppointmentsFragment.OnListFragmentInteractionListener listener) {
+    public AppointmentListAdapter(AppointmentsFragment.OnListFragmentInteractionListener listener) {
         this.appointments = new ArrayList<>();
         mListener = listener;
     }
@@ -32,8 +35,9 @@ public class AppointmentListAdapter extends RecyclerView.Adapter<AppointmentList
 
     @Override
     public void onBindViewHolder(final AppointmentViewHolder holder, int position) {
+
         holder.appointment = appointments.get(position);
-        holder.mIdView.setText(appointments.get(position).getCalendar().toString());
+        holder.setDate(appointments.get(position).getDate());
         holder.mContentView.setText(appointments.get(position).getNotes());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -58,15 +62,21 @@ public class AppointmentListAdapter extends RecyclerView.Adapter<AppointmentList
 
     public class AppointmentViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
+        public final TextView date;
         public final TextView mContentView;
+        private final Context context;
         public Appointment appointment;
 
         public AppointmentViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
+            date = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.date);
+            context = view.getContext();
+        }
+
+        public void setDate(long dateInMills) {
+            date.setText(DateUtils.formatDateTime(context, dateInMills, DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME));
         }
 
         @Override

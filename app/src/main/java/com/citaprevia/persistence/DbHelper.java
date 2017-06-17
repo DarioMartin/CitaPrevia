@@ -32,6 +32,6 @@ public class DbHelper {
 
 
     public void addNewAppointment(Appointment appointment) {
-        database.child("appointments").child(String.valueOf(appointment.getCalendar().getTimeInMillis())).setValue(appointment);
+        database.child("appointments").child(String.valueOf(appointment.getDate())).setValue(appointment);
     }
 }
